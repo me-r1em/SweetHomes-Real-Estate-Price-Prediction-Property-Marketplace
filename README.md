@@ -3,7 +3,6 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
 [![Flask](https://img.shields.io/badge/Flask-2.0%2B-black)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://your-demo-link.com) <!-- Replace with actual demo if available -->
 
 **SweetHomes** is a modern, full-stack web application that serves as a real estate marketplace where users can upload, browse, search, and manage property listings. It features AI-powered property descriptions generated via Google Gemini API and house price predictions using an XGBoost model trained on the Ames Housing dataset. The app emphasizes user-friendly design with responsive UI, secure authentication, and interactive features like favoriting properties and contact info toggles.
 
@@ -50,8 +49,8 @@ This project was built to explore web development with Flask, AI integration (Ge
 
 1. **Clone the Repository**:
    ```
-   git clone https://github.com/yourusername/sweethomes.git
-   cd sweethomes
+   git clone https://github.com/me-r1em/SweetHomes-Real-Estate-Price-Prediction-Property-Marketplace.git
+   cd SweetHomes-Real-Estate-Price-Prediction-Property-Marketplace
    ```
 
 2. **Set Up Virtual Environment**:
@@ -143,4 +142,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 - Flask community for robust web framework.
 - Unsplash for placeholder images.
 
-Questions? Open an issue or contact [your.email@example.com]. Happy house hunting! 🏠✨
+Questions? Open an issue or contact [merad.meriem.chehd@example.com]. Happy house hunting! 🏠✨
