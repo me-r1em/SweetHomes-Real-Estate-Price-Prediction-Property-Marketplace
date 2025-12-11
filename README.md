@@ -31,19 +31,30 @@ This project was built to explore web development with Flask, AI integration (Ge
 ## Screenshots
 
 ### Home Page with Search
-![Home Page](path/to/screenshot-home.png) <!-- Add actual paths or links -->
+![Home Page]<img width="1919" height="1004" alt="Screenshot 2025-12-11 111232" src="https://github.com/user-attachments/assets/10a52ff9-60bf-41cd-ae8e-81e6015bb09e" />
+-home.png) <img width="1919" height="997" alt="Screenshot 2025-12-11 111242" src="https://github.com/user-attachments/assets/d3c27678-657e-4509-817f-2a0f6dea0cb0" />
+
 
 ### Property Upload Form
-![Add Property](path/to/screenshot-add.png)
+![Add Property]<img width="1919" height="1002" alt="Screenshot 2025-12-11 111327" src="https://github.com/user-attachments/assets/3f681c25-5186-4cbf-9a94-692d867ecbb3" />
+<img width="1919" height="1003" alt="Screenshot 2025-12-11 111316" src="https://github.com/user-attachments/assets/8e701878-0c86-4dff-a6fa-93c607839e54" />
+<img width="1919" height="1002" alt="Screenshot 2025-12-11 111336" src="https://github.com/user-attachments/assets/df71d4e5-fee4-4c1e-a098-688821a66a91" />
+
 
 ### Property Detail View
-![Property Details](path/to/screenshot-detail.png)
+![Property Details]<img width="1919" height="1004" alt="Screenshot 2025-12-11 111421" src="https://github.com/user-attachments/assets/0ac87dfa-4f14-418b-8f07-b982a167d660" />
+<img width="1919" height="997" alt="Screenshot 2025-12-11 111431" src="https://github.com/user-attachments/assets/e1d44334-761a-463c-8fc2-78dee3aab538" />
+
 
 ### User Profile
-![Profile](path/to/screenshot-profile.png)
+![Profile]<img width="1919" height="1001" alt="Screenshot 2025-12-11 111356" src="https://github.com/user-attachments/assets/1e89c23e-b248-4761-b25e-d6f6a85b639e" />
+<img width="1919" height="1003" alt="Screenshot 2025-12-11 111406" src="https://github.com/user-attachments/assets/93bffb88-12ab-4624-827f-1d104695643b" />
+
 
 ### Login/Register (Glassmorphic)
-![Auth](path/to/screenshot-auth.png)
+![Auth]
+<img width="1919" height="1001" alt="Screenshot 2025-12-11 111451" src="https://github.com/user-attachments/assets/a8109cf7-fbe8-49ca-982b-6ee40f0e50c9" />
+<img width="1919" height="1001" alt="Screenshot 2025-12-11 111502" src="https://github.com/user-attachments/assets/a39c10b8-4200-4b49-a32e-32879fcb7c69" />
 
 ## Installation
 
@@ -142,4 +153,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 - Flask community for robust web framework.
 - Unsplash for placeholder images.
 
-Questions? Open an issue or contact [merad.meriem.chehd@example.com]. Happy house hunting! 🏠✨
+Questions? Open an issue or contact [merad.meriem.chehd@gmail.com]. Happy house hunting! 🏠✨
