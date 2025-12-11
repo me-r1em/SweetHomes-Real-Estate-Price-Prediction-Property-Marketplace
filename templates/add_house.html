@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}Add Property - SweetHomes.com{% endblock %}
+
+{% block head %}
+<style>
+    .form-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+
+    .form-title {
+        font-size: 2rem;
+        color: var(--dark-color);
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 40px;
+    }
+
+    .submit-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: var(--border-radius);
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+        background-color: #0d4a9c;
+    }
+
+    .reset-btn {
+        background-color: #f0f0f0;
+        color: var(--dark-color);
+        border: none;
+        padding: 15px 40px;
+        border-radius: var(--border-radius);
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .reset-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .predict-btn {
+        margin-top: 10px;
+        background: #1f457a;
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        border: none;
+        font-weight: bold;
+    }
+
+    .predict-btn:hover {
+        background: #2828a7;
+    }
+
+    .add-more-btn {
+        margin-top: 10px;
+        background: #1f457a;
+        color: white;
+        padding: 5px 10px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        border: none;
+        font-weight: bold;
+    }
+    .add-more-btn:hover {
+        background: #2828a7;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(33, 16, 185, 0.35);
+    }
+    .add-more-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+    }
+
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        .form-container {
+            padding: 30px 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Add New Property</h1>
+
+    <form id="add-property-form" method="POST" action="{{ url_for('add_house') }}" enctype="multipart/form-data">
+
+        <!-- BASIC HOUSE INFO -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="title">Property Title *</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location *</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+        </div>
+        <!-- PROPERTY DETAILS: bedrooms / bathrooms / area -->
+    <div class="form-row">
+        <div class="form-group">
+            <label>Bedrooms</label>
+            <input type="number" name="bedrooms" min="1" value="3" required>
+        </div>
+        <div class="form-group">
+            <label>Bathrooms</label>
+            <input type="number" step="0.5" name="bathrooms" value="2" required>
+        </div>
+        <div class="form-group">
+            <label>Area (m²)</label>
+            <input type="number" name="area_sqm" value="180" required>
+        </div>
+    </div>
+        <!-- CONTACT INFO -->
+        <h3 style="text-align:center; color:var(--dark-color); margin:30px 0 20px;">
+            Contact Information
+        </h3>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="owner_phone">Phone Number *</label>
+                <input type="text" id="owner_phone" name="owner_phone" placeholder="e.g. +1 123-456-7890" required>
+            </div>
+
+            <div class="form-group">
+                <label for="owner_email">Email Address *</label>
+                <input type="email" id="owner_email" name="owner_email" placeholder="e.g. example@mail.com" required>
+            </div>
+        </div>
+
+        <!-- PRICE + IMAGE -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">Price (optional)</label>
+                <input type="text" id="price" name="price" placeholder="Leave empty to use predicted price">
+            </div>
+
+            <div class="form-group">
+                <label for="image">Property Image *</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+        </div>
+
+        <div class="form-group" id="interior-container">
+            <label for="interior_images">Interior Images (optional)</label>
+            <input type="file" name="interior_images" accept="image/*" multiple>
+            <button type="button" id="add-more-btn" class="add-more-btn">Add More Images +</button>
+        </div>
+
+
+        <!-- AI PREDICTION INPUTS -->
+        <h3 style="text-align:center; color:var(--dark-color); margin-bottom:20px;">
+            AI Price Prediction (Optional)
+        </h3>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Overall Quality (1–10)</label>
+                <input type="number" id="overall_qual" name="overall_qual" min="1" max="10" placeholder="Example: 7">
+            </div>
+
+            <div class="form-group">
+                <label>Living Area (Gr Liv Area)</label>
+                <input type="number" id="gr_liv_area" name="gr_liv_area" placeholder="e.g. 1800">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Total Bathrooms</label>
+                <input type="number" step="0.5" id="total_bath" name="total_bath" placeholder="e.g. 2.5">
+            </div>
+
+            <div class="form-group">
+                <label>Total Square Feet</label>
+                <input type="number" id="total_sf" name="total_sf" placeholder="e.g. 2800">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>House Age</label>
+                <input type="number" id="house_age" name="house_age" placeholder="e.g. 15">
+            </div>
+
+            <div class="form-group">
+                <label>Remodel Age</label>
+                <input type="number" id="remodel_age" name="remodel_age" placeholder="e.g. 10">
+            </div>
+        </div>
+
+        <!-- PREDICT BUTTON -->
+        <button type="button" class="predict-btn" id="predict-btn">Use AI to Predict Price</button>
+
+        <div class="form-group" style="margin-top:15px;">
+            <label>AI Predicted Price</label>
+            <div id="predicted-box" 
+                style="display:none; padding:12px; background:#e8f4ff; border:1px solid #007bff; border-radius:8px; font-weight:600;">
+            </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+
+        <!-- AI DESCRIPTION BUTTON -->
+        <button type="button" class="predict-btn" id="ai-desc-btn" style="margin: 20px 0; width:100%;">
+    Generate Luxury Description with AI
+</button>
+
+<script>
+document.getElementById('ai-desc-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('ai-desc-btn');
+    const originalText = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating magic...';
+
+    const data = {
+        title:       document.getElementById('title').value || "Dream Home",
+        location:     document.getElementById('location').value || "a beautiful city",
+        bedrooms:     document.querySelector('[name="bedrooms"]').value,
+        bathrooms:    document.querySelector('[name="bathrooms"]').value,
+        area_sqm:     document.querySelector('[name="area_sqm"]').value
+    };
+
+    try {
+        const resp = await fetch('/ai_description', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await resp.json();
+        
+        if (result.description) {
+            document.getElementById('description').value = result.description;
+        } else {
+            alert('AI failed: ' + (result.error || 'unknown'));
+        }
+    } catch (e) {
+        alert('Network error – check console');
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+});
+</script>
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Add Property</button>
+            <button type="reset" class="reset-btn">Clear Form</button>
+        </div>
+        
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

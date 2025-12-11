@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SweetHomes.com{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Finding Your New Home Is Simple</h1>
+        <p>SweetHomes.com is your go to destination for finding the perfect home to suit your needs.<br>
+        With thousands of property listings across the United States, and Europe.</p>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <h2>Find Your Dream Home</h2>
+            <form method="GET" action="{{ url_for('search') }}" class="search-form">
+                <div class="search-fields-container">
+                    <div class="search-fields-grid">
+                        <div class="search-field">
+                            <div class="search-input">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" name="city" placeholder="City, Street, or ZIP" value="{{ request.args.get('city', '') }}">
+                            </div>
+                        </div>
+                        
+                        <div class="search-field">
+                            <div class="search-input">
+                                <i class="fas fa-euro-sign"></i>
+                                <input type="number" name="min_price" placeholder="Min Price" min="0" value="{{ request.args.get('min_price', '') }}">
+                            </div>
+                        </div>
+                        
+                        <div class="search-field">
+                            <div class="search-input">
+                                <i class="fas fa-euro-sign"></i>
+                                <input type="number" name="max_price" placeholder="Max Price" min="0" value="{{ request.args.get('max_price', '') }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="search-button-container">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i> Search Properties
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            {% if search_query %}
+            <div class="search-results-info">
+                <div class="search-info-text">
+                    <p>Showing results for: <strong>{{ search_query }}</strong></p>
+                </div>
+                <div class="search-action-buttons">
+    <a href="{{ url_for('index') }}" class="clear-search-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <i class="fas fa-times"></i> Clear Search
+    </a>
+</div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    <!-- Main Content -->
+    <main>
+        <div class="content-wrapper">
+            <!-- Properties Section -->
+            <section class="most-viewed">
+                <div class="section-header">
+                    <h2>{% if search_query %}Search Results{% else %}Most Viewed Properties{% endif %}</h2>
+                    <p class="section-description">
+                        {% if search_query %}
+                            Found {{ houses|length }} property{% if houses|length != 1 %}ies{% endif %} matching your criteria.
+                        {% else %}
+                            Discover a range of vacation homes worldwide. Book securely and get expert customer support for a stress-free stay.
+                        {% endif %}
+                    </p>
+                </div>
+                
+                {% if houses %}
+                <div class="properties-grid">
+                    {% for house in houses %}
+                    <!-- Property Card -->
+<div class="property-card">
+    <div class="property-image">
+        {% if house.image and house.image.strip() != '' %}
+    <img src="{{ url_for('static', filename='uploads/' + house.image) }}" alt="{{ house.title }}">
+{% else %}
+    {% set placeholder_images = [
+        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+    ] %}
+    <img src="{{ placeholder_images[loop.index0 % placeholder_images|length] }}" alt="{{ house.title }}">
+{% endif %}
+        <div class="property-badge">
+            {% if loop.index == 1 %}Most Viewed{% elif loop.index == 2 %}Popular{% else %}Trending{% endif %}
+        </div>
+    </div>
+    <div class="property-details">
+        <h3>{{ house.title }}</h3>
+        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ house.location }}</p>
+        <p class="property-description">
+            {% if house.description|length > 100 %}
+                {{ house.description[:100] }}...
+            {% else %}
+                {{ house.description }}
+            {% endif %}
+        </p>
+        <div class="property-price">€{{ house.price }}</div>
+        <a href="{{ url_for('view_house', id=house.id) }}" class="view-details-btn">View Details</a>
+    </div>
+</div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>{% if search_query %}No Properties Found{% else %}No Properties Available{% endif %}</h3>
+                    <p>
+                        {% if search_query %}
+                        No properties match your search criteria. Try adjusting your filters or search terms.
+                        {% else %}
+                        No properties are currently listed. Be the first to <a href="{{ url_for('add_house') }}">add a property</a>!
+                        {% endif %}
+                    </p>
+                    {% if search_query %}
+                    <a href="{{ url_for('index') }}" class="cta-button">View All Properties</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </section>
+            
+            {% if not search_query %}
+            <!-- Testimonial/Call to Action -->
+            <section class="cta-section">
+                <div class="cta-content">
+                    <h2>The Easiest Method To Find a House</h2>
+                    <p>Our platform makes it simple to find, compare, and book your perfect home. With verified listings and secure booking, your dream home is just a few clicks away.</p>
+                    <a href="{{ url_for('add_house') }}" class="cta-button">List Your Property</a>
+                </div>
+            </section>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Search Section Styles */
+    .search-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 40px 0;
+        margin-bottom: 40px;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .search-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .search-section h2 {
+        text-align: center;
+        color: var(--dark-color);
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    
+    .search-form {
+        background: white;
+        padding: 30px;
+        gap: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: 1px solid #e0e0e0;
+    }
+    
+    .search-fields-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px; 
+    }
+    
+    .search-fields-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px; 
+    }
+    
+    .search-field {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .search-input {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 14px 18px;
+        transition: all 0.3s ease;
+        height: 56px;
+    }
+    
+    .search-input:focus-within {
+        border-color: var(--primary-color);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    
+    .search-input i {
+        color: #6c757d;
+        margin-right: 12px;
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+    }
+    
+    .search-input input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        outline: none;
+        width: 100%;
+        color: var(--dark-color);
+        font-weight: 500;
+    }
+    
+    .search-input input::placeholder {
+        color: #adb5bd;
+        font-weight: 400;
+    }
+    
+    .search-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .search-btn {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0d4a9c 100%);
+        color: white;
+        border: none;
+        padding: 16px 40px;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        min-width: 220px;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    }
+    
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+        background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    }
+    
+    .search-btn:active {
+        transform: translateY(0);
+    }
+    
+    /* Search Results Info */
+    .search-results-info {
+        max-width: 1200px;
+        margin: 25px auto 0;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-radius: 10px;
+        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .search-info-text p {
+        margin: 0;
+        color: var(--dark-color);
+        font-size: 16px;
+    }
+    
+    .search-info-text strong {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+        .clear-search-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        text-align: center;
+        line-height: 1.5;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .clear-search-btn:hover {
+        background: #1e40af;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .clear-search-btn:active {
+        transform: translateY(0);
+    }
+    
+    .clear-search-btn i {
+        font-size: 12px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .search-fields-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .search-results-info {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .search-action-buttons {
+            width: 100%;
+        }
+        
+        .clear-search-btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .search-btn {
+            width: 100%;
+            padding: 14px 20px;
+        }
+        
+        .search-form {
+            padding: 20px;
+        }
+        
+        .search-fields-container {
+            gap: 20px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .search-section {
+            padding: 30px 0;
+        }
+        
+        .search-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            padding: 12px 15px;
+            height: 50px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Index page specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-format price inputs
+        const priceInputs = document.querySelectorAll('input[name="min_price"], input[name="max_price"]');
+        
+        priceInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value) {
+                    // Format number with commas
+                    let value = this.value.replace(/,/g, '');
+                    if (!isNaN(value) && value !== '') {
+                        this.value = Number(value).toLocaleString();
+                    }
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                // Remove commas for editing
+                if (this.value) {
+                    this.value = this.value.replace(/,/g, '');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

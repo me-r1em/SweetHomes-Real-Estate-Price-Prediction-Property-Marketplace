@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - SweetHomes.com{% endblock %}
+
+{% block head %}
+<style>
+    .profile-container {
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+    
+    .profile-header {
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0d4a9c 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: white;
+    }
+    
+    .profile-info h1 {
+        font-size: 2.2rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+    
+    .profile-info p {
+        color: var(--text-secondary);
+        margin-bottom: 5px;
+    }
+    
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .stat-card {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        text-align: center;
+        border: 1px solid var(--border-color);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 16px;
+    }
+    
+    .profile-content {
+        margin-top: 40px;
+    }
+    
+    .properties-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 20px;
+    }
+    
+    .properties-section {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid var(--primary-color);
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        color: var(--text-color);
+        margin: 0;
+    }
+    
+    .properties-count {
+        background: var(--primary-color);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+    
+    .properties-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .property-item {
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        background: var(--card-bg-secondary);
+    }
+    
+    .property-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .property-image {
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .property-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .property-item:hover .property-image img {
+        transform: scale(1.05);
+    }
+    
+    .property-details {
+        padding: 15px;
+    }
+    
+    .property-details h4 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: var(--text-color);
+    }
+    
+    .property-location {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .property-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .property-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .view-btn {
+        padding: 8px 15px;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: background 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .view-btn:hover {
+        background: var(--primary-hover);
+        color: white;
+    }
+    
+    .delete-btn {
+        padding: 8px 15px;
+        background: #dc3545;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: background 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .delete-btn:hover {
+        background: #c82333;
+    }
+    
+    .empty-section {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-secondary);
+    }
+    
+    .empty-section i {
+        font-size: 3rem;
+        color: var(--border-color);
+        margin-bottom: 15px;
+    }
+    
+    .empty-section h4 {
+        font-size: 1.3rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+    
+    .empty-section p {
+        margin-bottom: 20px;
+        color: var(--text-secondary);
+    }
+    
+    .cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: background 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .cta-button:hover {
+        background: var(--primary-hover);
+        color: white;
+    }
+  /* Delete Confirmation Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    
+   .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: var(--border-radius);
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
+    
+    .modal-content h3 {
+        color: var(--text-color);
+        margin-bottom: 15px;
+    }
+    
+    .modal-content p {
+        color: var(--text-secondary);
+        margin-bottom: 25px;
+    }
+    
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .modal-cancel {
+        padding: 10px 20px;
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-weight: 600;
+    }
+    
+    .modal-cancel:hover {
+        background: var(--secondary-hover);
+    }
+    
+    .modal-delete {
+        padding: 10px 20px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-weight: 600;
+    }
+    
+    .modal-delete:hover {
+        background: #c82333;
+    }
+    
+    /* Dark theme specific overrides */
+    :root[data-theme="dark"] .property-image {
+        opacity: 0.9;
+    }
+    
+    :root[data-theme="dark"] .property-item:hover .property-image {
+        opacity: 1;
+    }
+    
+    :root[data-theme="dark"] .empty-section i {
+        color: var(--text-secondary);
+        opacity: 0.5;
+    }
+    
+    :root[data-theme="dark"] .stat-card {
+        background: var(--card-bg-secondary);
+    }
+
+    /* Text muted for dark theme */
+    .text-muted {
+        color: var(--text-color) !important;
+    }
+    
+    /* Ensure text is readable in dark mode */
+    :root[data-theme="dark"] .profile-info p,
+    :root[data-theme="dark"] .property-location,
+    :root[data-theme="dark"] .empty-section p,
+    :root[data-theme="dark"] .modal-content p {
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .profile-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .properties-sections {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .property-actions {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .action-buttons {
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .modal-actions {
+            flex-direction: column;
+        }
+        
+        .modal-cancel,
+        .modal-delete {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ current_user.username[0].upper() }}
+        </div>
+        <div class="profile-info">
+            <h1>{{ current_user.username }}</h1>
+            <p><i class="fas fa-envelope"></i> {{ current_user.email }}</p>
+            <p><i class="fas fa-user-tag"></i> {% if current_user.is_admin %}Administrator{% else %}Regular User{% endif %}</p>
+            <p>
+                <i class="fas fa-calendar-alt"></i> 
+                Member since: 
+                {% if current_user.registered_on %}
+                    {{ current_user.registered_on.strftime('%Y-%m-%d') }}
+                {% else %}
+                    Unknown
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div class="profile-stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ user_houses|length }}</div>
+            <div class="stat-label">Properties Listed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ favorite_houses|length }}</div>
+            <div class="stat-label">Favorites</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{% if current_user.is_admin %}All{% else %}Basic{% endif %}</div>
+            <div class="stat-label">Account Type</div>
+        </div>
+    </div>
+    
+    <!-- Properties and Favorites Side-by-Side -->
+    <div class="properties-sections">
+        <!-- Left Column: My Properties -->
+        <div class="properties-section">
+            <div class="section-header">
+                <h3 class="section-title">My Properties</h3>
+                <span class="properties-count">{{ user_houses|length }}</span>
+            </div>
+            
+            {% if user_houses %}
+                <div class="properties-list">
+                    {% for house in user_houses %}
+                    <div class="property-item">
+                        <div class="property-image">
+                            {% if house.image %}
+                            <img src="{{ url_for('static', filename='uploads/' + house.image) }}" alt="{{ house.title }}">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="{{ house.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="property-details">
+                            <h4>{{ house.title }}</h4>
+                            <p class="property-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ house.location }}
+                            </p>
+                            <div class="property-price">€{{ house.price }}</div>
+                            <div class="property-actions">
+                                <div class="action-buttons">
+                                    <a href="{{ url_for('view_house', id=house.id) }}" class="view-btn">View Details</a>
+                                    <button class="delete-btn" data-house-id="{{ house.id }}" data-house-title="{{ house.title }}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                                <small class="text-muted">
+                                    Listed on: {{ house.created_at.strftime('%Y-%m-%d') if house.created_at else 'Recently' }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-section">
+                    <i class="fas fa-home"></i>
+                    <h4>No Properties Listed</h4>
+                    <p>You haven't listed any properties yet.</p>
+                    <a href="{{ url_for('add_house') }}" class="cta-button">Add Your First Property</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Right Column: My Favorites -->
+        <div class="properties-section">
+            <div class="section-header">
+                <h3 class="section-title">My Favorites</h3>
+                <span class="properties-count">{{ favorite_houses|length }}</span>
+            </div>
+            
+            {% if favorite_houses %}
+                <div class="properties-list">
+                    {% for house in favorite_houses %}
+                    <div class="property-item">
+                        <div class="property-image">
+                            {% if house.image %}
+                            <img src="{{ url_for('static', filename='uploads/' + house.image) }}" alt="{{ house.title }}">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="{{ house.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="property-details">
+                            <h4>{{ house.title }}</h4>
+                            <p class="property-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ house.location }}
+                            </p>
+                            <div class="property-price">€{{ house.price }}</div>
+                            <div class="property-actions">
+                                <a href="{{ url_for('view_house', id=house.id) }}" class="view-btn">View Details</a>
+                                <small class="text-muted">
+                                    by {{ house.owner.username if house.owner else 'Admin' }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-section">
+                    <i class="fas fa-heart"></i>
+                    <h4>No Favorites Yet</h4>
+                    <p>You haven't added any properties to your favorites list.</p>
+                    <a href="{{ url_for('index') }}" class="cta-button">Browse Properties</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Delete Property</h3>
+        <p>Are you sure you want to delete "<span id="propertyName"></span>"? This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button id="cancelDelete" class="modal-cancel">Cancel</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <button type="submit" class="modal-delete">Delete Property</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const deleteForm = document.getElementById('deleteForm');
+        const propertyName = document.getElementById('propertyName');
+        
+        let houseToDelete = null;
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const houseId = this.getAttribute('data-house-id');
+                const title = this.getAttribute('data-house-title');
+                
+                houseToDelete = houseId;
+                propertyName.textContent = title;
+                
+                // Set form action
+                deleteForm.action = "{{ url_for('delete_house', id=0) }}".replace('0', houseId);
+                
+                // Show modal
+                deleteModal.style.display = 'flex';
+            });
+        });
+        
+        // Cancel deletion
+        cancelDelete.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+            houseToDelete = null;
+        });
+        
+        // Close modal when clicking outside
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                houseToDelete = null;
+            }
+        });
+    });
+</script>
+{% endblock %}
